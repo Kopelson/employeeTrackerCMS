@@ -1,0 +1,31 @@
+{
+  "name": "employeetrackercms",
+  "version": "1.0.0",
+  "description": "Content Management System to manage a company's employees using node, inquirer, and MySQL ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kopelson/employeeTrackerCMS.git"
+  },
+  "keywords": [
+    "CMS",
+    "inquirer",
+    "node",
+    "tracker",
+    "employee"
+  ],
+  "author": "Ken Kopelson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kopelson/employeeTrackerCMS/issues"
+  },
+  "homepage": "https://github.com/Kopelson/employeeTrackerCMS#readme",
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
