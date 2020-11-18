@@ -16,46 +16,35 @@ const connection = mysql.createConnection({
   database: "company_db"
 });
 
-
-
-//CRUD for company_db
-// function createTable(table){
-    
-// }
-
-// function readTable(table) {
-    
-// }
-
-// function updateTable(table){
-
-// }
-
-// function deleteTable(table){
-
-
-// }
 //documentation on exports/requires https://nodejs.org/api/modules.html
 module.exports = {
-
+  //start connection to database
   getConnection: function(){
     connection.connect(function(err) {
       if (err) throw err;
       server.start();
     })
   }, 
-
+  //ends connection to database
   endConnection: function(){
     connection.end();
   },
-
+  //view different tables in the database
   viewQuery: function(select, from){
     connection.query(`SELECT ${select} FROM ${from}`, function(error, res) {
         if (error) throw err;
         console.log(res);
         server.start();
-      }
-    ); 
-}
+    })
+  },
 
+  addQuery: function(table, col, value){
+    //INSERT INTO department (name)
+    //VALUES ("Production")
+    connection.query(`INSERT INTO ${table} (${col}) VALUES ("${value}")`, function(error) {
+      if (error) throw err;
+      console.log(`Success! ${value} has been added to the company ${table}!`);
+      server.start();
+    })
+  }
 }
