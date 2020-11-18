@@ -37,13 +37,25 @@ const connection = mysql.createConnection({
 // }
 //documentation on exports/requires https://nodejs.org/api/modules.html
 module.exports = {
+
   getConnection: function(){
     connection.connect(function(err) {
       if (err) throw err;
       server.start();
     })
   }, 
+
   endConnection: function(){
     connection.end();
-  }
+  },
+
+  viewQuery: function(select, from){
+    connection.query(`SELECT ${select} FROM ${from}`, function(error, res) {
+        if (error) throw err;
+        console.log(res);
+        server.start();
+      }
+    ); 
+}
+
 }

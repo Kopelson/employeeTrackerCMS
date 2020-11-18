@@ -1,6 +1,7 @@
 // const mysql = require("mysql");
 const inquirer = require("inquirer");
-const { endConnection } = require("./assets/js/company_db");
+const company_db = require("./assets/js/company_db");
+const { endConnection, viewQuery } = require("./assets/js/company_db");
 const db = require("./assets/js/company_db");
 
 db.getConnection();
@@ -17,12 +18,18 @@ function start(){
                 switch (answer.action) {
                     case "VIEW Employee Directory":
                         //add function
+                        //SELECT id, first_name, last_name FROM company_db.employee;
+                        viewQuery("id, first_name, last_name", "company_db.employee");
                         break;
                     case "VIEW  Company Roles":
                         //add function
+                        //SELECT id, title, salary FROM company_db.role;
+                        viewQuery("id, title, salary", "company_db.role");
                         break;
                     case "VIEW Company Departments":
                         //add function
+                        //SELECT * FROM company_db.department;
+                        viewQuery("*", "company_db.department");
                         break; 
                     case "ADD Company  Department":
                         //add function

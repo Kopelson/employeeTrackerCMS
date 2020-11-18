@@ -34,7 +34,7 @@ VALUES ("Production"), ("R&D"), ("Marketing"), ("HR"), ("Accounting and Finance"
 -- inserts dummy data into role table --
 INSERT INTO role (title, salary, departmentID)
 VALUES ("Associate Product Manager", 45000, 1),("Product Manager", 52000, 1),("Lead Product Manager", 65000, 1),
-("R&D Tech", 39000, 2),("R&D Manager", 48000, 2),("Lead R&D Manager",7800, 2),("Chief Marketing Officer", 120000, 3),
+("R&D Tech", 39000, 2),("R&D Manager", 48000, 2),("Lead R&D Manager",78000, 2),("Chief Marketing Officer", 120000, 3),
 ("Marketing Analyst", 95000, 3),("Marketing Manager", 74000, 3),("HR Associate", 32000, 4),("HR Supervisor", 55000, 4),
 ("HR Director", 95000, 4), ("Accountant", 46000, 5),("Auditor", 56000, 5),("Chief Financial Officer", 95000, 5);
 -- inserts dummy data into employee table --
