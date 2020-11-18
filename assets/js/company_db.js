@@ -1,5 +1,6 @@
 //Connect to db
 const mysql = require("mysql");
+const server = require("../../server");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -34,12 +35,15 @@ const connection = mysql.createConnection({
 
 
 // }
+//documentation on exports/requires https://nodejs.org/api/modules.html
 module.exports = {
   getConnection: function(){
     connection.connect(function(err) {
       if (err) throw err;
-      console.log("connected as id " + connection.threadId + "\n");
-      connection.end();
+      server.start();
     })
-  } 
+  }, 
+  endConnection: function(){
+    connection.end();
+  }
 }
