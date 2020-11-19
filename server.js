@@ -230,11 +230,46 @@ function deleteRolePrompt(){
                     //DELETE FROM "table" WHERE id = "id_value"
                     db.deleteQuery("company_db.role", chosenRoleID)
                 });
- }
+}
 
-// function deleteEmployeePrompt(){
-    
-// }
+function deleteEmployeePrompt(){
+    let employeeNameArray = [];
+    db.getEmployeeNames(employeeNameArray);
+        inquirer
+                .prompt([
+                    {
+                        type: "confirm",
+                        message: "WARNING! Deleting an employee will remove them from the Employee directory. Are you sure you want to continue?",
+                        name: "warning"
+                    },
+                    {
+                        type: "list",
+                        message: "What employee would you like to delete?",
+                        choices: function() {
+                            var choiceArray = [];
+                            for (var i = 0; i < employeeNameArray.length; i++) {
+                              choiceArray.push(`${employeeNameArray[i][1]} ${employeeNameArray[i][2]}`);
+                            }
+                            return choiceArray;
+                          },
+                        name: "employeeID",
+                        when: (answers) => answers.warning === true         
+                    }
+                ]
+                ).then( function(answer) {
+                    if (answer.warning === false){
+                        return start();
+                    }
+                    let chosenEmployeeID;
+                    for (let i = 0; i <employeeNameArray.length; i++) {
+                    if (`${employeeNameArray[i][1]} ${employeeNameArray[i][2]}` === answer.employeeID) {
+                        chosenEmployeeID = employeeNameArray[i][0];
+                    }
+                    }
+                    //DELETE FROM "table" WHERE id = "id_value"
+                    db.deleteQuery("company_db.employee", chosenEmployeeID)
+                });
+}
 
 start();
 

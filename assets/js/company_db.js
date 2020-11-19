@@ -50,7 +50,6 @@ const db = {
   deleteQuery: function(table, id){
     //DELETE FROM company_db.department
     //WHERE id = id_value;
-    console.log(table, id);
     connection.query(`Delete FROM ${table} WHERE id = ${id}`, function(error) {
       if (error) throw err;
       console.log(`Success!`);
@@ -73,6 +72,16 @@ const db = {
       if (error) throw err;
       for (let i = 0; i < res.length; i++){
         arr.push([res[i].id, res[i].title]);
+      }
+      return arr;
+    })
+  },
+
+  getEmployeeNames: function(arr){
+    connection.query(`SELECT * from company_db.employee`, function(error, res) {
+      if (error) throw err;
+      for (let i = 0; i < res.length; i++){
+        arr.push([res[i].id, res[i].first_name, res[i].last_name]);
       }
       return arr;
     })
