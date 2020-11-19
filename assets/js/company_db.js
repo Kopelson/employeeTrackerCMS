@@ -42,7 +42,7 @@ const db = {
     //VALUES ("Production")
     connection.query(`INSERT INTO ${table} (${col}) VALUES (${value})`, function(error) {
       if (error) throw err;
-      console.log(`Success! ${value} has been added to the company ${table}!`);
+      console.log(`Success!`);
       server.start();
     })
   },
@@ -53,7 +53,7 @@ const db = {
     console.log(table, id);
     connection.query(`Delete FROM ${table} WHERE id = ${id}`, function(error) {
       if (error) throw err;
-      console.log(`Success! ${id} has been deleted from the company ${table} and all related data!`);
+      console.log(`Success!`);
       server.start();
     })
   },

@@ -179,6 +179,9 @@ function deleteDepartmentPrompt(){
                     }
                 ]
                 ).then( function(answer) {
+                    if (answer.warning === false){
+                        return start();
+                    }
                     let chosenDepartmentID;
                     for (let i = 0; i <departmentNameArray.length; i++) {
                     if (departmentNameArray[i][1] === answer.departmentID) {
@@ -190,9 +193,44 @@ function deleteDepartmentPrompt(){
                 });
 }
 
-// function deleteRolePrompt(){
-    
-// }
+function deleteRolePrompt(){
+    let roleNameArray = [];
+    db.getRoleNames(roleNameArray);
+        inquirer
+                .prompt([
+                    {
+                        type: "confirm",
+                        message: "WARNING! Deleting a role will also delete all related employees within a role. Are you sure you want to continue?",
+                        name: "warning"
+                    },
+                    {
+                        type: "list",
+                        message: "What role would you like to delete?",
+                        choices: function() {
+                            var choiceArray = [];
+                            for (var i = 0; i < roleNameArray.length; i++) {
+                              choiceArray.push(roleNameArray[i][1]);
+                            }
+                            return choiceArray;
+                          },
+                        name: "roleID",
+                        when: (answers) => answers.warning === true         
+                    }
+                ]
+                ).then( function(answer) {
+                    if (answer.warning === false){
+                        return start();
+                    }
+                    let chosenRoleID;
+                    for (let i = 0; i <roleNameArray.length; i++) {
+                    if (roleNameArray[i][1] === answer.roleID) {
+                        chosenRoleID = roleNameArray[i][0];
+                    }
+                    }
+                    //DELETE FROM "table" WHERE id = "id_value"
+                    db.deleteQuery("company_db.role", chosenRoleID)
+                });
+ }
 
 // function deleteEmployeePrompt(){
     
