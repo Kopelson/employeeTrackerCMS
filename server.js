@@ -1,8 +1,8 @@
-// const mysql = require("mysql");
+//require dependiencies 
 const inquirer = require("inquirer");
-const company_db = require("./assets/js/company_db");
-const { endConnection, viewQuery, addQuery} = require("./assets/js/company_db");
 const db = require("./assets/js/company_db");
+const { endConnection, viewQuery, addQuery, getDepartmentNames} = require("./assets/js/company_db");
+
 
 db.getConnection();
 
@@ -29,9 +29,10 @@ function start(){
                         viewQuery("*", "company_db.department");
                         break; 
                     case "ADD Company Department":
-                        addPrompt();
+                        addDepartmentPrompt();
                         break;
                     case "ADD Company Role": 
+                        addCompanyPrompt();
                         break;
                     case "ADD Company Employee": 
                         break;
@@ -49,7 +50,7 @@ function start(){
             })
 }
 
-function addPrompt(){
+function addDepartmentPrompt(){
     inquirer
         .prompt(
             {
@@ -61,8 +62,44 @@ function addPrompt(){
             //This capitalizes the first word of the input tutorial https://flaviocopes.com/how-to-uppercase-first-letter-javascript/
             const name = answer.name;
             const capitalizeName = name.charAt(0).toUpperCase() + name.slice(1);
-            //INSERT INTO table (col) VALUES ("value");
-            addQuery("department", "name", capitalizeName)
+            //INSERT INTO department (name) VALUES ("name_value");
+            addQuery(`department`, `name`, `"${capitalizeName}"`)
         })
 }
+
+function addCompanyPrompt(){
+        let departmentNameArray = [];
+        getDepartmentNames(departmentNameArray);
+        inquirer
+            .prompt(
+            [
+                {
+                    type: "input",
+                    message: "Enter in the name of the new role you want to add: ",
+                    name: "title"
+                },
+                {
+                    type: "number",
+                    message: "Enter in the salary of this new role: ",
+                    name: "salary"
+                },
+                {
+                    type: "list",
+                    message: "What department is this role fall under?",
+                    choices: departmentNameArray,
+                    name: "departmentID"
+                }
+            ]
+            ).then( function(answer) {
+                let chosenItem;
+                for (let i = 0; i <departmentNameArray.length; i++) {
+                  if (departmentNameArray[i] === answer.departmentID) {
+                    chosenItem = i + 1;
+                  }
+                }
+                //INSERT INTO role (title, salary, departmentID) VALUES ("title_value", salary_value, departmentID_value);
+                addQuery("role", `title, salary, departmentID`, `"${answer.title}", ${answer.salary}, ${chosenItem}`);
+            })
+}
+    
 exports.start = start;

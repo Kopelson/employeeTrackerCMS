@@ -41,10 +41,20 @@ module.exports = {
   addQuery: function(table, col, value){
     //INSERT INTO department (name)
     //VALUES ("Production")
-    connection.query(`INSERT INTO ${table} (${col}) VALUES ("${value}")`, function(error) {
+    connection.query(`INSERT INTO ${table} (${col}) VALUES (${value})`, function(error) {
       if (error) throw err;
       console.log(`Success! ${value} has been added to the company ${table}!`);
       server.start();
+    })
+  },
+
+  getDepartmentNames: function(arr){
+    connection.query(`SELECT * from company_db.department`, function(error, res) {
+      if (error) throw err;
+      for (let i = 0; i < res.length; i++){
+        arr.push(res[i].name);
+      }
+      return arr;
     })
   }
 }
