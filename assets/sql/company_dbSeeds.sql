@@ -17,7 +17,7 @@ CREATE TABLE role(
     salary int,
     departmentID int NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (departmentID) REFERENCES department(id) ON DELETE CASCADE
+    FOREIGN KEY (departmentID) REFERENCES department(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- creates a table named employee --
 CREATE TABLE employee(
@@ -26,7 +26,7 @@ CREATE TABLE employee(
     last_name varchar(30),
     roleID int,
     PRIMARY KEY (id),
-    FOREIGN KEY (roleID) REFERENCES role(id) ON DELETE CASCADE
+    FOREIGN KEY (roleID) REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 -- inserts dummy data into department table --
 INSERT INTO department (name)

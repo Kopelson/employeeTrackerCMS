@@ -88,8 +88,8 @@ function addCompanyPrompt(){
                     type: "list",
                     message: "What department is this role fall under?",
                     choices: function() {
-                        var choiceArray = [];
-                        for (var i = 0; i < departmentNameArray.length; i++) {
+                        let choiceArray = [];
+                        for (let i = 0; i < departmentNameArray.length; i++) {
                           choiceArray.push(departmentNameArray[i][1]);
                         }
                         return choiceArray;
@@ -129,8 +129,8 @@ function addEmployeePrompt(){
                 type: "list",
                 message: "What role does this employee have?",
                 choices: function() {
-                    var choiceArray = [];
-                    for (var i = 0; i < roleNameArray.length; i++) {
+                    let choiceArray = [];
+                    for (let i = 0; i < roleNameArray.length; i++) {
                       choiceArray.push(roleNameArray[i][1]);
                     }
                     return choiceArray;
@@ -150,9 +150,68 @@ function addEmployeePrompt(){
             });
 }
 
-// function updateEmployeeRolePrompt(){
-
-// }
+function updateEmployeeRolePrompt(){
+    let employeeNameArray = [];
+    let roleNameArray = [];
+    db.getEmployeeNames(employeeNameArray);
+    db.getRoleNames(roleNameArray);
+    inquirer
+        .prompt(
+            [
+                {
+                    type: "confirm",
+                    message: "You have chosen to update an employee's role within the company Are you sure you want to continue?",
+                    name: "warning"
+                },
+                {
+                    type: "list",
+                    message: "Who would you like to update?",
+                    choices: function() {
+                        let choiceArrayEmployee = [];
+                        for (let i = 0; i < employeeNameArray.length; i++) {
+                        choiceArrayEmployee.push(`${employeeNameArray[i][1]} ${employeeNameArray[i][2]}`);
+                        }
+                        return choiceArrayEmployee;
+                    },
+                    name: "employeeID",
+                    when: (answers) => answers.warning === true         
+                },
+                {
+                    type: "list",
+                    message: "What is their new role?",
+                    choices: function() {
+                        let choiceArrayRole = [];
+                        for (let i = 0; i < roleNameArray.length; i++) {
+                        choiceArrayRole.push(roleNameArray[i][1]);
+                        }
+                        return choiceArrayRole;
+                    },
+                    name: "roleID",
+                    when: (answers) => answers.warning === true   
+                }
+            ]
+        ).then(function(answer) {
+            if (answer.warning === false){
+                return start();
+            }
+            let chosenEmployeeID;
+                for (let i = 0; i <employeeNameArray.length; i++) {
+                    if (`${employeeNameArray[i][1]} ${employeeNameArray[i][2]}` === answer.employeeID) {
+                        chosenEmployeeID = employeeNameArray[i][0];
+                    }
+                }
+            let chosenRoleID;
+                for (let i = 0; i <roleNameArray.length; i++) {
+                    if (roleNameArray[i][1] === answer.roleID) {
+                        chosenRoleID = roleNameArray[i][0];
+                    }
+                }
+            //UPDATE company_db.employee
+	        //SET roleID = roleID_value
+            //WHERE id = id_value;
+            db.updateQuery(chosenRoleID, chosenEmployeeID);
+            })
+}
 
 function deleteDepartmentPrompt(){
     let departmentNameArray = [];
@@ -168,8 +227,8 @@ function deleteDepartmentPrompt(){
                         type: "list",
                         message: "What department would you like to delete?",
                         choices: function() {
-                            var choiceArray = [];
-                            for (var i = 0; i < departmentNameArray.length; i++) {
+                            let choiceArray = [];
+                            for (let i = 0; i < departmentNameArray.length; i++) {
                               choiceArray.push(departmentNameArray[i][1]);
                             }
                             return choiceArray;
@@ -207,8 +266,8 @@ function deleteRolePrompt(){
                         type: "list",
                         message: "What role would you like to delete?",
                         choices: function() {
-                            var choiceArray = [];
-                            for (var i = 0; i < roleNameArray.length; i++) {
+                            let choiceArray = [];
+                            for (let i = 0; i < roleNameArray.length; i++) {
                               choiceArray.push(roleNameArray[i][1]);
                             }
                             return choiceArray;
@@ -246,8 +305,8 @@ function deleteEmployeePrompt(){
                         type: "list",
                         message: "What employee would you like to delete?",
                         choices: function() {
-                            var choiceArray = [];
-                            for (var i = 0; i < employeeNameArray.length; i++) {
+                            let choiceArray = [];
+                            for (let i = 0; i < employeeNameArray.length; i++) {
                               choiceArray.push(`${employeeNameArray[i][1]} ${employeeNameArray[i][2]}`);
                             }
                             return choiceArray;

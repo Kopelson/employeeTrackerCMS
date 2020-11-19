@@ -57,6 +57,14 @@ const db = {
     })
   },
 
+  updateQuery: function(set, where){
+    connection.query(`UPDATE company_db.employee SET roleID = ${set} WHERE id = ${where}`, function (error) {
+      if (error) throw err;
+      console.log('Success!');
+      server.start();
+    })
+  },
+
   getDepartmentNames: function(arr){
     connection.query(`SELECT * from company_db.department`, function(error, res) {
       if (error) throw err;
