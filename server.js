@@ -1,10 +1,6 @@
 //require dependiencies 
 const inquirer = require("inquirer");
 const db = require("./assets/js/company_db");
-const { endConnection, viewQuery, addQuery, getDepartmentNames, getRoleNames} = require("./assets/js/company_db");
-
-
-db.getConnection();
 
 function start(){
     inquirer
@@ -12,21 +8,21 @@ function start(){
             {
                 type: "list",
                 message: "What would you like to do?",
-                choices: ["VIEW Employee Directory", "VIEW Company Roles", "VIEW Company Departments", "ADD Company Department", "ADD Company Role", "ADD Company Employee", "UPDATE An Employee Role", "DELETE a Company Department", "DELETE a Company Role", "DELETE a Company Employee", "EXIT"],
+                choices: ["VIEW Employee Directory", "VIEW Company Roles", "VIEW Company Departments", "ADD Company Employee", "ADD Company Role", "ADD Company Department", "UPDATE An Employee Role", "DELETE a Company Employee", "DELETE a Company Role", "DELETE a Company Department", "EXIT"],
                 name: "action"
             }).then(function(answer) {
                 switch (answer.action) {
                     case "VIEW Employee Directory":
                         //SELECT id, first_name, last_name FROM company_db.employee;
-                        viewQuery("id, first_name, last_name", "company_db.employee");
+                        db.viewQuery("id, first_name, last_name", "company_db.employee");
                         break;
                     case "VIEW Company Roles":
                         //SELECT id, title, salary FROM company_db.role;
-                        viewQuery("id, title, salary", "company_db.role");
+                        db.viewQuery("id, title, salary", "company_db.role");
                         break;
                     case "VIEW Company Departments":
                         //SELECT * FROM company_db.department;
-                        viewQuery("*", "company_db.department");
+                        db.viewQuery("*", "company_db.department");
                         break; 
                     case "ADD Company Department":
                         addDepartmentPrompt();
@@ -38,15 +34,19 @@ function start(){
                         addEmployeePrompt()
                         break;
                     case "UPDATE An Employee Role":
+                        updateEmployeeRolePrompt()
                         break;
                     case "DELETE a Company Department":
+                        deleteDepartmentPrompt()
                         break;
                     case "DELETE a Company Role":
+                        deleteRolePrompt()
                         break;
-                    case "DELETE a Company Employee": 
+                    case "DELETE a Company Employee":
+                        deleteEmployeePrompt() 
                         break;
                     case "EXIT":
-                        endConnection();
+                        db.endConnection();
                 }
             })
 }
@@ -64,13 +64,13 @@ function addDepartmentPrompt(){
             const name = answer.name;
             const capitalizeName = name.charAt(0).toUpperCase() + name.slice(1);
             //INSERT INTO department (name) VALUES ("name_value");
-            addQuery(`department`, `name`, `"${capitalizeName}"`)
+            db.addQuery(`department`, `name`, `"${capitalizeName}"`)
         })
 }
 
 function addCompanyPrompt(){
         let departmentNameArray = [];
-        getDepartmentNames(departmentNameArray);
+        db.getDepartmentNames(departmentNameArray);
         inquirer
             .prompt(
             [
@@ -87,26 +87,32 @@ function addCompanyPrompt(){
                 {
                     type: "list",
                     message: "What department is this role fall under?",
-                    choices: departmentNameArray,
+                    choices: function() {
+                        var choiceArray = [];
+                        for (var i = 0; i < departmentNameArray.length; i++) {
+                          choiceArray.push(departmentNameArray[i][1]);
+                        }
+                        return choiceArray;
+                      },
                     name: "departmentID"
                 }
             ]
             ).then( function(answer) {
                 let chosenItem;
                 for (let i = 0; i <departmentNameArray.length; i++) {
-                  if (departmentNameArray[i] === answer.departmentID) {
-                    chosenItem = i + 1;
+                  if (departmentNameArray[i][1] === answer.departmentID) {
+                    chosenItem = departmentNameArray[i][0];
                   }
                 }
                 //INSERT INTO role (title, salary, departmentID) VALUES ("title_value", salary_value, departmentID_value);
-                addQuery("role", `title, salary, departmentID`, `"${answer.title}", ${answer.salary}, ${chosenItem}`);
+                db.addQuery("role", `title, salary, departmentID`, `"${answer.title}", ${answer.salary}, ${chosenItem}`);
             })
 }
 
 function addEmployeePrompt(){
-    let roleNameArray = []
-    getRoleNames(roleNameArray);
-    inquirer
+    let roleNameArray = [];
+    db.getRoleNames(roleNameArray);
+      inquirer
         .prompt(
             [
             {
@@ -116,26 +122,82 @@ function addEmployeePrompt(){
             },
             {
                 type: "input",
-                message: "Please enter the first name of the new Employee: ",
+                message: "Please enter the last name of the new Employee: ",
                 name: "last_name"
             },
             {
                 type: "list",
                 message: "What role does this employee have?",
-                choices: roleNameArray,
+                choices: function() {
+                    var choiceArray = [];
+                    for (var i = 0; i < roleNameArray.length; i++) {
+                      choiceArray.push(roleNameArray[i][1]);
+                    }
+                    return choiceArray;
+                  }
+        ,
                 name: "roleID"
             }
         ]
         ).then( function(answer) {
             let chosenRoleID;
             for (let i = 0; i < roleNameArray.length; i++) {
-            if (roleNameArray[i] === answer.roleID) {
-                chosenRoleID = i + 1;
+            if (roleNameArray[i][1] === answer.roleID) {
+                chosenRoleID = roleNameArray[i][0];
             }
             }
-                addQuery("employee", "first_name, last_name, roleID", `"${answer.first_name}", "${answer.last_name}", ${chosenRoleID}`);        
-        })
+                db.addQuery("employee", "first_name, last_name, roleID", `"${answer.first_name}", "${answer.last_name}", ${chosenRoleID}`);        
+            });
 }
 
+// function updateEmployeeRolePrompt(){
+
+// }
+
+function deleteDepartmentPrompt(){
+    let departmentNameArray = [];
+    db.getDepartmentNames(departmentNameArray);
+        inquirer
+                .prompt([
+                    {
+                        type: "confirm",
+                        message: "WARNING! Deleting a department will also delete all related roles and employees within a department. Are you sure you want to continue?",
+                        name: "warning"
+                    },
+                    {
+                        type: "list",
+                        message: "What department would you like to delete?",
+                        choices: function() {
+                            var choiceArray = [];
+                            for (var i = 0; i < departmentNameArray.length; i++) {
+                              choiceArray.push(departmentNameArray[i][1]);
+                            }
+                            return choiceArray;
+                          },
+                        name: "departmentID",
+                        when: (answers) => answers.warning === true         
+                    }
+                ]
+                ).then( function(answer) {
+                    let chosenDepartmentID;
+                    for (let i = 0; i <departmentNameArray.length; i++) {
+                    if (departmentNameArray[i][1] === answer.departmentID) {
+                        chosenDepartmentID = departmentNameArray[i][0];
+                    }
+                    }
+                    //DELETE FROM "table" WHERE id = "id_value"
+                    db.deleteQuery("company_db.department", chosenDepartmentID)
+                });
+}
+
+// function deleteRolePrompt(){
     
+// }
+
+// function deleteEmployeePrompt(){
+    
+// }
+
+start();
+
 exports.start = start;

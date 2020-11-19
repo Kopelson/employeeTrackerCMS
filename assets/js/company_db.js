@@ -16,8 +16,7 @@ const connection = mysql.createConnection({
   database: "company_db"
 });
 
-//documentation on exports/requires https://nodejs.org/api/modules.html
-module.exports = {
+const db = {
   //start connection to database
   getConnection: function(){
     connection.connect(function(err) {
@@ -48,11 +47,22 @@ module.exports = {
     })
   },
 
+  deleteQuery: function(table, id){
+    //DELETE FROM company_db.department
+    //WHERE id = id_value;
+    console.log(table, id);
+    connection.query(`Delete FROM ${table} WHERE id = ${id}`, function(error) {
+      if (error) throw err;
+      console.log(`Success! ${id} has been deleted from the company ${table} and all related data!`);
+      server.start();
+    })
+  },
+
   getDepartmentNames: function(arr){
     connection.query(`SELECT * from company_db.department`, function(error, res) {
       if (error) throw err;
       for (let i = 0; i < res.length; i++){
-        arr.push(res[i].name);
+        arr.push([res[i].id, res[i].name]);
       }
       return arr;
     })
@@ -62,9 +72,11 @@ module.exports = {
     connection.query(`SELECT * from company_db.role`, function(error, res) {
       if (error) throw err;
       for (let i = 0; i < res.length; i++){
-        arr.push(res[i].title);
+        arr.push([res[i].id, res[i].title]);
       }
       return arr;
     })
   }
 }
+//documentation on exports/requires https://nodejs.org/api/modules.html
+module.exports = db
