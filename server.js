@@ -1,7 +1,7 @@
 //require dependiencies 
 const inquirer = require("inquirer");
 const db = require("./assets/js/company_db");
-const { endConnection, viewQuery, addQuery, getDepartmentNames} = require("./assets/js/company_db");
+const { endConnection, viewQuery, addQuery, getDepartmentNames, getRoleNames} = require("./assets/js/company_db");
 
 
 db.getConnection();
@@ -35,6 +35,7 @@ function start(){
                         addCompanyPrompt();
                         break;
                     case "ADD Company Employee": 
+                        addEmployeePrompt()
                         break;
                     case "UPDATE An Employee Role":
                         break;
@@ -101,5 +102,40 @@ function addCompanyPrompt(){
                 addQuery("role", `title, salary, departmentID`, `"${answer.title}", ${answer.salary}, ${chosenItem}`);
             })
 }
+
+function addEmployeePrompt(){
+    let roleNameArray = []
+    getRoleNames(roleNameArray);
+    inquirer
+        .prompt(
+            [
+            {
+                type: "input",
+                message: "Please enter the first name of the new Employee: ",
+                name: "first_name"
+            },
+            {
+                type: "input",
+                message: "Please enter the first name of the new Employee: ",
+                name: "last_name"
+            },
+            {
+                type: "list",
+                message: "What role does this employee have?",
+                choices: roleNameArray,
+                name: "roleID"
+            }
+        ]
+        ).then( function(answer) {
+            let chosenRoleID;
+            for (let i = 0; i < roleNameArray.length; i++) {
+            if (roleNameArray[i] === answer.roleID) {
+                chosenRoleID = i + 1;
+            }
+            }
+                addQuery("employee", "first_name, last_name, roleID", `"${answer.first_name}", "${answer.last_name}", ${chosenRoleID}`);        
+        })
+}
+
     
 exports.start = start;

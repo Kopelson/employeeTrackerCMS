@@ -56,5 +56,15 @@ module.exports = {
       }
       return arr;
     })
+  },
+
+  getRoleNames: function(arr){
+    connection.query(`SELECT * from company_db.role`, function(error, res) {
+      if (error) throw err;
+      for (let i = 0; i < res.length; i++){
+        arr.push(res[i].title);
+      }
+      return arr;
+    })
   }
 }
