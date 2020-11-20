@@ -4,6 +4,8 @@ Developers are often tasked with creating interfaces that make it easy for non-d
   Link to video demonstration: https://www.youtube.com/watch?v=I9s21EbcL1Y
 
 ## Overview
+![start](https://user-images.githubusercontent.com/57735283/99856516-fe0a0100-2b3d-11eb-972f-6d1142250f47.gif)
+
 
 ### Database Schema
 * **department**:
@@ -28,13 +30,36 @@ Developers are often tasked with creating interfaces that make it easy for non-d
 ### Command-line Application Usages:
 
   * Add departments, roles, employees
+#### Create Departments
+![createDepartment](https://user-images.githubusercontent.com/57735283/99856535-06fad280-2b3e-11eb-97b6-4e90718c9b04.gif)
+
+#### Create Roles
+![createRole](https://user-images.githubusercontent.com/57735283/99856538-082bff80-2b3e-11eb-98f0-cdf88d2999fe.gif)
+
+#### Create Employees
+![createEmployee](https://user-images.githubusercontent.com/57735283/99856536-07936900-2b3e-11eb-98aa-b21b6f0674a6.gif)
 
   * View departments, roles, employees
+#### View Different Tables
+  ![view](https://user-images.githubusercontent.com/57735283/99856543-08c49600-2b3e-11eb-811d-2fffe892a0f0.gif)
 
   * Update employee roles
+#### Update Employee Role  
+![update](https://user-images.githubusercontent.com/57735283/99857202-8dfc7a80-2b3f-11eb-9ffe-6bb8a26e3072.gif)
 
   * Delete departments, roles, and employees
+#### Delete Departments
+![deleteDepartment](https://user-images.githubusercontent.com/57735283/99856540-082bff80-2b3e-11eb-9ec2-9cdd95ecd5e3.gif)
 
+#### Delete Role
+![deleteRole](https://user-images.githubusercontent.com/57735283/99856542-082bff80-2b3e-11eb-8d45-3cfbde9ad1e5.gif)
+
+#### Delete Employee
+![deleteEmployee](https://user-images.githubusercontent.com/57735283/99856541-082bff80-2b3e-11eb-9a1f-741b8d615e3f.gif)
+
+  * View Comprehensive Employee Directory and Exit Program
+#### Comprehensive Employee Directory and Exit
+![exit](https://user-images.githubusercontent.com/57735283/99856519-006c5b00-2b3e-11eb-998b-7cbc5f9dec60.gif)
 
 ### USER STORY
 
@@ -63,7 +88,7 @@ How do you install this on in your own enviorment? Here are some guidelines:
 
 ## Potential  Bugs
 
-The prompts in my server.js need queries to company_db.js to fill arrays with data which take time. I added an extra prompt before the array was used that fill the choices for the list type prompts. If the database becomes very large I fear this will need more time to populate the array. I noticed if the prompt immediately asked the user to pick from the array the array would be empty crashing or freezing the application. In a future update I plan on promisfying these so the prompt will wait for this information to populate.
+The prompts in my server.js need queries to company_db to fill arrays with data which take time. I added an extra prompt before the array was used that fill the choices for the list type prompts. If the database becomes very large I fear this will need more time to populate the array. I noticed if the prompt immediately asked the user to pick from the array the array would be empty crashing or freezing the application. In a future update I plan on promisfying these so the prompt will wait for this information to populate.
 
 ## Extras 
 
