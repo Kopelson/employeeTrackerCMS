@@ -1,6 +1,8 @@
 //Connect to db
 const mysql = require("mysql");
 const server = require("../../server");
+const chalk = require('chalk');
+const Table = require('easy-table')
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -32,9 +34,63 @@ const db = {
   viewQuery: function(select, from){
     connection.query(`SELECT ${select} FROM ${from}`, function(error, res) {
         if (error) throw err;
-        console.log(res);
+        let t = new Table;
+        switch(from){
+          case "company_db.employee":
+            res.forEach(function(employee) {
+              t.cell(chalk.green('ID'), chalk.green(employee.id))
+              t.cell(chalk.green('First'), chalk.green(employee.first_name))
+              t.cell(chalk.green('Last'), chalk.green(employee.last_name))
+              t.newRow()
+            });
+            break;
+          case "company_db.role":
+            res.forEach(function(role) {
+              t.cell(chalk.yellow('ID'), chalk.yellow(role.id))
+              t.cell(chalk.yellow('Title'), chalk.yellow(role.title))
+              t.cell(chalk.yellow('Salary'), chalk.yellow(role.salary))
+              t.newRow()
+            });
+            break;
+          case "company_db.department":
+            res.forEach(function(department) {
+              t.cell(chalk.red('ID'), chalk.red(department.id))
+              t.cell(chalk.red('Name'), chalk.red(department.name))
+              t.newRow()
+            });
+        }
+        console.log(t.toString())
         server.start();
     })
+  },
+
+  comprehensiveEmployeeQuery: function(){
+    connection.query(`
+      SELECT 
+          concat(employee.first_name,' ', employee.last_name) as Employee,
+          role.title as "Role Title",
+          department.name as Department,
+          role.salary as "Salary"
+      FROM employee 
+      INNER JOIN role ON employee.roleID = role.id
+      INNER JOIN department ON role.departmentID = department.id;`, 
+      function(error, res) {
+        if (error) throw err;
+        let t = new Table;
+
+        res.forEach(function(employee) {
+          t.cell(chalk.green('Name'), chalk.green(employee.Employee))
+          t.cell(chalk.yellow('Role'), chalk.yellow(employee["Role Title"]))
+          t.cell(chalk.red('Department'), chalk.red(employee.Department))
+          t.cell(chalk.yellow('Salary'), chalk.yellow(employee.Salary))
+          t.newRow()
+        });
+
+        console.log(t.toString())
+
+        server.start();
+      }
+    )
   },
 
   addQuery: function(table, col, value){

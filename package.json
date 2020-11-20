@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/Kopelson/employeeTrackerCMS#readme",
   "dependencies": {
+    "chalk": "^4.1.0",
+    "easy-table": "^1.1.1",
     "inquirer": "^7.3.3",
     "mysql": "^2.18.1"
   }

@@ -1,4 +1,4 @@
-//require dependiencies 
+//require dependencies 
 const inquirer = require("inquirer");
 const db = require("./assets/js/company_db");
 
@@ -8,7 +8,7 @@ function start(){
             {
                 type: "list",
                 message: "What would you like to do?",
-                choices: ["VIEW Employee Directory", "VIEW Company Roles", "VIEW Company Departments", "ADD Company Employee", "ADD Company Role", "ADD Company Department", "UPDATE An Employee Role", "DELETE a Company Employee", "DELETE a Company Role", "DELETE a Company Department", "EXIT"],
+                choices: ["VIEW Employee Directory", "VIEW Company Roles", "VIEW Company Departments", "VIEW Comprehensive Employee", "ADD Company Employee", "ADD Company Role", "ADD Company Department", "UPDATE An Employee Role", "DELETE a Company Employee", "DELETE a Company Role", "DELETE a Company Department", "EXIT"],
                 name: "action"
             }).then(function(answer) {
                 switch (answer.action) {
@@ -44,6 +44,9 @@ function start(){
                         break;
                     case "DELETE a Company Employee":
                         deleteEmployeePrompt() 
+                        break;
+                    case "VIEW Comprehensive Employee":
+                        db.comprehensiveEmployeeQuery()
                         break;
                     case "EXIT":
                         db.endConnection();
