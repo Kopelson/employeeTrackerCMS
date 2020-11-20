@@ -24,7 +24,6 @@ Developers are often tasked with creating interfaces that make it easy for non-d
   * **first_name** - VARCHAR(30) to hold employee first name
   * **last_name** - VARCHAR(30) to hold employee last name
   * **role_id** - INT to hold reference to role employee has
-  * **manager_id** - INT to hold reference to another employee that manages the employee being Created. This field may be null if the employee has no manager
   
 ### Command-line Application Usages:
 
